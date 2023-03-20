@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
+
 /**
  * The main game "loop", called when the script is first loaded
  * and after the user's answer has been processed
@@ -44,6 +45,8 @@ function runGame(gameType) {
         displayMultiplyQuestion(num1, num2);
     } else if (gameType === "subtract") {
         displaySubtractQuestion(num1, num2);
+    } else if (gameType === "division") {
+        displayDivisionQuestion(num1, num2);
     } else {
         alert(`Unknown game type: ${gameType}`);
         throw `Unknown game type ${gameType}. Aborting!`;
@@ -71,6 +74,7 @@ function checkAnswer() {
     runGame(calculatedAnswer[1]);
 }
 
+
 /**
  * Gets the operands (numbers) and the operator (plus, minus etc)
  * directly from the DOM, and returns the correct answer. 
@@ -87,11 +91,14 @@ function calculateCorrectAnswer() {
         return [operand1 * operand2, "multiply"];
     } else if (operator === "-") {
         return [operand1 - operand2, "subtract"];
+    } else if (operator === "/") {
+        return [operand1 / operand2, "division"];
     } else {
         alert (`Unimplemented operator ${operator}`);
         throw `Unimplemented operator ${operator}. Aborting!`
     }
 }
+
 
 /** 
  * Gets the current score and increments it by 1
@@ -102,6 +109,7 @@ function incrementScore() {
     document.getElementById('score').innerText = ++oldScore;
 }
 
+
 /** 
  * Gets the current tally of incorrect answers and increments it by 1
 */
@@ -111,6 +119,7 @@ function incrementWrongAnswer() {
     document.getElementById('incorrect').innerText = ++oldScore;
 
 }
+
 
 function displayAdditionQuestion(operand1, operand2) {
 
@@ -133,5 +142,20 @@ function displayMultiplyQuestion(operand1, operand2) {
     document.getElementById('operand2').textContent = operand2; 
     document.getElementById('operator').textContent = "x";
 
+}
+
+function displayDivisionQuestion(operand1, operand2) {
+            
+    let biggerNum = operand1 > operand2 ? operand1 : operand2;
+    let smallerNum = operand1 > operand2 ? operand2 : operand1;
+
+    if (biggerNum % smallerNum === 0 && biggerNum !== smallerNum) {
+        document.getElementById('operand1').textContent = biggerNum
+        document.getElementById('operand2').textContent = smallerNum;
+    } else {
+        runGame("division")
+    } 
+         
+    document.getElementById('operator').textContent = "/";
 }
 
